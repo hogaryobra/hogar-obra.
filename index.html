@@ -6,529 +6,1255 @@
 <title>Hogar &amp; Obra — Guías de aplicación</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --rojo: #D72B2B;
-    --amarillo: #F5C800;
-    --naranja: #E8720C;
-    --azul-acento: #4A9CC7;
-    --verde-enduido: #3A9E6F;
-    --verde-claro: #5DC98C;
-    --negro: #0A0A0A;
-    --gris-oscuro: #111317;
-    --gris-medio: #1C2028;
-    --gris-texto: #C8CDD6;
-    --blanco: #FFFFFF;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Barlow', sans-serif; background-color: var(--negro); color: var(--blanco); min-height: 100vh; overflow-x: hidden; }
- 
-  /* PAGES */
-  .page { display: none; min-height: 100vh; }
-  .page.active { display: block; }
- 
-  /* ——— NAVBAR ——— */
-  .navbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 40px; height: 90px;
-    background: rgba(10,10,10,0.96);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(245,200,0,0.15);
-  }
-  .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
-  .brand-text { display: flex; flex-direction: column; line-height: 1; }
-  .brand-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: 1px; color: var(--blanco); }
-  .brand-name span { color: var(--amarillo); }
-  .brand-tagline { font-family: 'Barlow Condensed', sans-serif; font-weight: 400; font-size: 12px; letter-spacing: 3px; color: var(--gris-texto); text-transform: uppercase; margin-top: 4px; }
- 
-  .nav-right { display: flex; align-items: center; gap: 16px; }
-  /* Botón selector de sección en navbar */
-  .nav-switcher {
-    display: flex; align-items: center; gap: 0;
-    border: 1px solid rgba(245,200,0,0.2);
-    overflow: hidden;
-  }
-  .nav-switch-btn {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700; font-size: 14px; letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 12px 24px;
-    background: transparent;
-    color: var(--gris-texto);
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s;
-    white-space: nowrap;
-  }
-  .nav-switch-btn:first-child { border-right: 1px solid rgba(245,200,0,0.2); }
-  .nav-switch-btn.active-latex {
-    background: var(--rojo);
-    color: var(--blanco);
-  }
-  .nav-switch-btn.active-enduido {
-    background: var(--verde-enduido);
-    color: var(--blanco);
-  }
-  .nav-switch-btn:not(.active-latex):not(.active-enduido):hover {
-    background: rgba(255,255,255,0.06);
-    color: var(--blanco);
-  }
- 
-  /* ——— HERO (compartido, diferente acento por page) ——— */
-  .hero { min-height: 60vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: 90px; }
-  .hero-bg { position: absolute; inset: 0; }
-  .hero-bg.latex-bg {
-    background: radial-gradient(ellipse 60% 70% at 80% 50%, rgba(215,43,43,0.08) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 40% at 20% 80%, rgba(245,200,0,0.05) 0%, transparent 60%),
-                linear-gradient(160deg, #0A0A0A 0%, #111317 50%, #0D0F12 100%);
-  }
-  .hero-bg.enduido-bg {
-    background: radial-gradient(ellipse 60% 70% at 80% 50%, rgba(58,158,111,0.1) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 40% at 20% 80%, rgba(93,201,140,0.06) 0%, transparent 60%),
-                linear-gradient(160deg, #0A0A0A 0%, #0e1410 50%, #0A0E0C 100%);
-  }
-  .hero-bg::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(-55deg, transparent, transparent 80px, rgba(245,200,0,0.012) 80px, rgba(245,200,0,0.012) 81px); }
-  .hero-inner { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; padding: 80px 48px; }
-  .hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; }
-  .hero-eyebrow.latex  { color: var(--amarillo); }
-  .hero-eyebrow.latex::before  { content: ''; display: block; width: 30px; height: 2px; background: var(--amarillo); }
-  .hero-eyebrow.enduido { color: var(--verde-claro); }
-  .hero-eyebrow.enduido::before { content: ''; display: block; width: 30px; height: 2px; background: var(--verde-claro); }
-  .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(64px, 9vw, 108px); line-height: 0.9; text-transform: uppercase; margin-bottom: 28px; letter-spacing: -1px; }
-  .hero h1 em.latex-em   { font-style: normal; color: transparent; -webkit-text-stroke: 2px var(--rojo); display: block; }
-  .hero h1 em.enduido-em { font-style: normal; color: transparent; -webkit-text-stroke: 2px var(--verde-enduido); display: block; }
-  .hero-desc { font-size: 16px; line-height: 1.7; color: var(--gris-texto); font-weight: 300; max-width: 480px; margin-bottom: 40px; }
- 
-  /* Botón back en hero enduido */
-  .hero-back-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--verde-claro);
-    background: rgba(58,158,111,0.12);
-    border: 1px solid rgba(58,158,111,0.3);
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.25s;
-    text-decoration: none;
-    margin-top: 8px;
-  }
-  .hero-back-btn:hover { background: rgba(58,158,111,0.22); border-color: rgba(93,201,140,0.5); }
-  .hero-back-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
- 
-  /* ——— SECCIONES ——— */
-  .section { max-width: 1200px; margin: 0 auto; padding: 100px 48px; }
-  .section-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-  .section-label.latex  { color: var(--amarillo); }
-  .section-label.latex::before  { content: ''; display: block; width: 24px; height: 2px; background: var(--amarillo); }
-  .section-label.enduido  { color: var(--verde-claro); }
-  .section-label.enduido::before { content: ''; display: block; width: 24px; height: 2px; background: var(--verde-claro); }
-  .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(36px, 5vw, 56px); text-transform: uppercase; line-height: 1; margin-bottom: 48px; letter-spacing: -0.5px; }
-  .divider-latex   { height: 1px; background: linear-gradient(90deg, transparent, rgba(245,200,0,0.2), transparent); margin: 0 48px; }
-  .divider-enduido { height: 1px; background: linear-gradient(90deg, transparent, rgba(58,158,111,0.25), transparent); margin: 0 48px; }
- 
-  /* ——— GRILLA PASOS ——— */
-  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-  .steps-grid.latex-grid  { background: rgba(245,200,0,0.06); border: 1px solid rgba(245,200,0,0.1); }
-  .steps-grid.enduido-grid { background: rgba(58,158,111,0.06); border: 1px solid rgba(58,158,111,0.12); }
-  .step { background: var(--gris-oscuro); padding: 36px 28px; position: relative; border-bottom: 3px solid transparent; transition: border-color 0.3s, background 0.3s; }
-  .step:hover { background: var(--gris-medio); }
-  .latex-grid   .step:hover { border-bottom-color: var(--rojo); }
-  .enduido-grid .step:hover { border-bottom-color: var(--verde-enduido); }
-  .step-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 72px; line-height: 1; position: absolute; top: 16px; right: 20px; transition: color 0.3s; }
-  .latex-grid   .step-num { color: rgba(245,200,0,0.07); }
-  .enduido-grid .step-num { color: rgba(58,158,111,0.08); }
-  .latex-grid   .step:hover .step-num { color: rgba(215,43,43,0.14); }
-  .enduido-grid .step:hover .step-num { color: rgba(93,201,140,0.16); }
-  .step-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 20px; border: 1px solid; }
-  .latex-grid   .step-icon { background: rgba(215,43,43,0.12); border-color: rgba(215,43,43,0.28); }
-  .enduido-grid .step-icon { background: rgba(58,158,111,0.12); border-color: rgba(58,158,111,0.28); }
-  .step h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; color: var(--blanco); }
-  .step p { font-size: 14px; line-height: 1.6; color: var(--gris-texto); font-weight: 300; }
- 
-  /* ——— TIPS ——— */
-  .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-  .tip { padding: 24px 28px; background: var(--gris-oscuro); }
-  /* látex */
-  .tip.latex-tip         { border-left: 3px solid var(--rojo); }
-  .tip.latex-warning     { border-left: 3px solid var(--amarillo); }
-  .tip.latex-info        { border-left: 3px solid var(--azul-acento); }
-  /* enduido */
-  .tip.enduido-tip       { border-left: 3px solid var(--verde-enduido); }
-  .tip.enduido-warning   { border-left: 3px solid var(--amarillo); }
-  .tip.enduido-info      { border-left: 3px solid var(--azul-acento); }
- 
-  .tip-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .tip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .tip.latex-tip         .tip-dot { background: var(--rojo); }
-  .tip.latex-warning     .tip-dot { background: var(--amarillo); }
-  .tip.latex-info        .tip-dot { background: var(--azul-acento); }
-  .tip.enduido-tip       .tip-dot { background: var(--verde-enduido); }
-  .tip.enduido-warning   .tip-dot { background: var(--amarillo); }
-  .tip.enduido-info      .tip-dot { background: var(--azul-acento); }
-  .tip h4 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: var(--blanco); }
-  .tip p  { font-size: 13px; line-height: 1.65; color: var(--gris-texto); font-weight: 300; }
- 
-  /* ——— FOOTER ——— */
-  footer { border-top: 1px solid; padding: 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; background: var(--gris-oscuro); }
-  footer.latex-footer   { border-color: rgba(245,200,0,0.1); }
-  footer.enduido-footer { border-color: rgba(58,158,111,0.15); }
-  .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 1px; color: var(--blanco); }
-  .footer-logo span.latex-span   { color: var(--amarillo); }
-  .footer-logo span.enduido-span { color: var(--verde-claro); }
-  .footer-sub { font-size: 11px; letter-spacing: 3px; color: rgba(200,205,214,0.45); text-transform: uppercase; margin-top: 2px; }
-  .footer-right { font-size: 12px; color: rgba(200,205,214,0.3); text-align: right; line-height: 1.8; }
- 
-  /* Botón de ir a enduido (en footer látex) */
-  .footer-nav-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px;
-    letter-spacing: 2px; text-transform: uppercase;
-    padding: 10px 20px; border: 1px solid; cursor: pointer; transition: all 0.25s;
-    background: transparent;
-  }
-  .footer-nav-btn.to-enduido {
-    color: var(--verde-claro); border-color: rgba(58,158,111,0.3);
-  }
-  .footer-nav-btn.to-enduido:hover { background: rgba(58,158,111,0.12); }
-  .footer-nav-btn.to-latex {
-    color: var(--amarillo); border-color: rgba(245,200,0,0.3);
-  }
-  .footer-nav-btn.to-latex:hover { background: rgba(245,200,0,0.08); }
-  .footer-nav-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
- 
-  @media (max-width: 768px) {
-    /* Navbar */
-    .navbar { padding: 0 16px; height: 70px; }
-    .brand-name { font-size: 20px; }
-    .brand-tagline { font-size: 9px; letter-spacing: 2px; }
-    .nav-switch-btn { font-size: 11px; padding: 8px 14px; letter-spacing: 1px; }
- 
-    /* Hero */
-    .hero { min-height: auto; padding-top: 70px; }
-    .hero-inner { padding: 40px 20px 48px; }
-    .hero h1 { font-size: clamp(52px, 16vw, 72px); margin-bottom: 16px; }
-    .hero-desc { font-size: 14px; margin-bottom: 28px; max-width: 100%; }
-    .hero-eyebrow { font-size: 10px; letter-spacing: 2px; margin-bottom: 14px; }
-    .hero-back-btn { font-size: 11px; padding: 9px 16px; }
- 
-    /* Secciones */
-    .section { padding: 48px 20px; }
-    .section-title { font-size: clamp(28px, 9vw, 40px); margin-bottom: 32px; }
-    .section-label { font-size: 10px; }
- 
-    /* Grilla pasos */
-    .steps-grid { grid-template-columns: 1fr; gap: 2px; }
-    .step { padding: 28px 20px; }
-    .step-num { font-size: 52px; top: 12px; right: 14px; }
-    .step h3 { font-size: 16px; }
-    .step p { font-size: 13px; }
- 
-    /* Tips */
-    .tips-grid { grid-template-columns: 1fr; gap: 12px; }
-    .tip { padding: 20px 18px; }
- 
-    /* Dividers */
-    .divider-latex, .divider-enduido { margin: 0 20px; }
- 
-    /* Footer */
-    footer { padding: 28px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
-    .footer-right { text-align: left; }
-    .footer-nav-btn { width: 100%; justify-content: center; }
-  }
+:root {
+  --rojo: #D72B2B;
+  --amarillo: #F5C800;
+  --naranja: #E8720C;
+  --naranja-prof: #E8720C;
+  --marron-prof: #2A1A08;
+  --magenta: #C41E6A;
+  --magenta-claro: #E8357A;
+  --azul-acento: #4A9CC7;
+  --verde-enduido: #3A9E6F;
+  --verde-claro: #5DC98C;
+  --negro: #0A0A0A;
+  --gris-oscuro: #111317;
+  --gris-medio: #1C2028;
+  --gris-texto: #C8CDD6;
+  --blanco: #FFFFFF;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Barlow',sans-serif;background-color:var(--negro);color:var(--blanco);min-height:100vh;overflow-x:hidden;}
+
+/* PAGES */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* ——— NAVBAR ——— */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:70px;
+  background:rgba(10,10,10,0.97);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(245,200,0,0.12);
+}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer;}
+.brand-text{display:flex;flex-direction:column;line-height:1;}
+.brand-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:1px;color:var(--blanco);}
+.brand-name span{color:var(--amarillo);}
+.brand-tagline{font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:10px;letter-spacing:3px;color:var(--gris-texto);text-transform:uppercase;margin-top:3px;}
+
+.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.nav-pill{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;
+  text-transform:uppercase;padding:8px 16px;background:transparent;
+  color:rgba(200,205,214,0.5);border:1px solid rgba(255,255,255,0.08);
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  min-height:36px;
+}
+.nav-pill:hover{color:var(--blanco);border-color:rgba(255,255,255,0.2);}
+.nav-pill.active-latex    {background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.nav-pill.active-profesional{background:var(--naranja-prof);color:#fff;border-color:var(--naranja-prof);}
+.nav-pill.active-premium  {background:var(--magenta);color:#fff;border-color:var(--magenta);}
+.nav-pill.active-enduido  {background:var(--verde-enduido);color:#fff;border-color:var(--verde-enduido);}
+.nav-home-btn{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;padding:7px 14px;background:transparent;
+  color:var(--amarillo);border:1px solid rgba(245,200,0,0.3);cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-home-btn:hover{background:rgba(245,200,0,0.08);}
+.nav-home-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;}
+
+/* ═══════════════════════════════
+   HOME PAGE — PANTALLA BIENVENIDA
+═══════════════════════════════ */
+#page-home{position:relative;overflow:hidden;}
+
+/* Fondo animado futurista */
+.home-bg{
+  position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(215,43,43,0.06) 0%, transparent 60%),
+             radial-gradient(ellipse 60% 50% at 20% 80%, rgba(245,200,0,0.04) 0%, transparent 50%),
+             radial-gradient(ellipse 50% 50% at 80% 60%, rgba(196,30,106,0.04) 0%, transparent 50%),
+             #0A0A0A;
+}
+.home-grid-lines{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(245,200,0,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,200,0,0.025) 1px, transparent 1px);
+  background-size:60px 60px;
+}
+.home-scan-line{
+  position:fixed;top:0;left:0;right:0;height:2px;z-index:1;
+  background:linear-gradient(90deg, transparent, rgba(245,200,0,0.3), rgba(215,43,43,0.4), rgba(245,200,0,0.3), transparent);
+  animation:scanLine 4s linear infinite;
+}
+@keyframes scanLine{0%{top:-2px;}100%{top:100vh;}}
+
+.home-content{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;padding-top:70px;}
+
+/* HERO HOME */
+.home-hero{
+  padding:70px 48px 40px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  position:relative;
+}
+.home-eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:5px;text-transform:uppercase;color:rgba(245,200,0,0.7);margin-bottom:24px;
+}
+.home-eyebrow::before,.home-eyebrow::after{content:'';display:block;width:40px;height:1px;background:rgba(245,200,0,0.4);}
+
+.home-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  font-size:clamp(54px,9vw,110px);line-height:0.88;
+  text-transform:uppercase;letter-spacing:-2px;margin-bottom:8px;
+}
+.home-title .line1{display:block;color:var(--blanco);}
+.home-title .line2{display:block;color:transparent;-webkit-text-stroke:2px var(--amarillo);}
+
+.home-subtitle{
+  font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:clamp(16px,3vw,22px);
+  letter-spacing:4px;text-transform:uppercase;color:rgba(200,205,214,0.4);margin-top:16px;margin-bottom:40px;
+}
+
+.home-cta-label{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:4px;text-transform:uppercase;color:rgba(200,205,214,0.35);
+  margin-bottom:32px;
+  display:flex;align-items:center;gap:16px;
+}
+.home-cta-label::before,.home-cta-label::after{content:'';display:block;width:60px;height:1px;background:rgba(200,205,214,0.15);}
+
+/* CARDS DE PRODUCTOS */
+.products-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2px;padding:0 40px 60px;
+  max-width:1400px;margin:0 auto;width:100%;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(32px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-16px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+#page-home.active .home-eyebrow{animation:fadeDown 0.5s ease both;}
+#page-home.active .home-title{animation:fadeDown 0.55s 0.08s ease both;}
+#page-home.active .home-subtitle{animation:fadeUp 0.5s 0.16s ease both;}
+#page-home.active .home-cta-label{animation:fadeUp 0.5s 0.22s ease both;}
+#page-home.active .product-card:nth-child(1){animation:cardIn 0.5s 0.28s ease both;}
+#page-home.active .product-card:nth-child(2){animation:cardIn 0.5s 0.38s ease both;}
+#page-home.active .product-card:nth-child(3){animation:cardIn 0.5s 0.48s ease both;}
+#page-home.active .product-card:nth-child(4){animation:cardIn 0.5s 0.58s ease both;}
+.product-card{
+  position:relative;overflow:hidden;cursor:pointer;
+  background:var(--gris-oscuro);
+  border:1px solid rgba(255,255,255,0.04);
+  padding:40px 28px 28px;
+  display:flex;flex-direction:column;
+  transition:transform 0.3s,background 0.3s;
+  min-height:380px;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.product-card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  transition:opacity 0.3s;opacity:0;
+}
+.product-card:hover{transform:translateY(-4px);}
+.product-card:hover::before{opacity:1;}
+
+/* Colores por producto */
+.card-latex::before{background:var(--rojo);}
+.card-latex .card-num{color:rgba(215,43,43,0.08);}
+.card-latex .card-icon-wrap{background:rgba(215,43,43,0.1);border-color:rgba(215,43,43,0.25);}
+.card-latex .card-tag{background:rgba(215,43,43,0.15);color:var(--rojo);border-color:rgba(215,43,43,0.3);}
+.card-latex .card-line{background:var(--rojo);}
+.card-latex:hover{background:#141010;}
+
+.card-profesional::before{background:var(--naranja-prof);}
+.card-profesional .card-num{color:rgba(232,114,12,0.08);}
+.card-profesional .card-icon-wrap{background:rgba(232,114,12,0.1);border-color:rgba(232,114,12,0.25);}
+.card-profesional .card-tag{background:rgba(232,114,12,0.15);color:var(--naranja-prof);border-color:rgba(232,114,12,0.3);}
+.card-profesional .card-line{background:var(--naranja-prof);}
+.card-profesional:hover{background:#13100A;}
+
+.card-premium::before{background:var(--magenta);}
+.card-premium .card-num{color:rgba(196,30,106,0.08);}
+.card-premium .card-icon-wrap{background:rgba(196,30,106,0.1);border-color:rgba(196,30,106,0.25);}
+.card-premium .card-tag{background:rgba(196,30,106,0.15);color:var(--magenta-claro);border-color:rgba(196,30,106,0.3);}
+.card-premium .card-line{background:var(--magenta);}
+.card-premium:hover{background:#120A0F;}
+
+.card-enduido::before{background:var(--verde-enduido);}
+.card-enduido .card-num{color:rgba(58,158,111,0.08);}
+.card-enduido .card-icon-wrap{background:rgba(58,158,111,0.1);border-color:rgba(58,158,111,0.25);}
+.card-enduido .card-tag{background:rgba(58,158,111,0.15);color:var(--verde-claro);border-color:rgba(58,158,111,0.3);}
+.card-enduido .card-line{background:var(--verde-enduido);}
+.card-enduido:hover{background:#0A100D;}
+
+.card-num{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:100px;
+  line-height:1;position:absolute;top:10px;right:16px;transition:color 0.3s;
+}
+.card-icon-wrap{
+  width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  border:1px solid;font-size:22px;margin-bottom:20px;position:relative;z-index:1;flex-shrink:0;
+}
+.card-icon-wrap svg{width:22px;height:22px;display:block;color:currentColor;}
+.card-category{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;color:rgba(200,205,214,0.35);
+  margin-bottom:8px;position:relative;z-index:1;
+}
+.card-name{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(26px,3vw,34px);
+  text-transform:uppercase;line-height:1;letter-spacing:-0.5px;
+  margin-bottom:16px;color:var(--blanco);position:relative;z-index:1;
+}
+.card-line{height:2px;width:36px;margin-bottom:16px;position:relative;z-index:1;}
+.card-desc{
+  font-size:13px;line-height:1.6;color:var(--gris-texto);font-weight:300;
+  position:relative;z-index:1;flex:1;
+}
+.card-features{margin-top:20px;display:flex;flex-direction:column;gap:6px;position:relative;z-index:1;}
+.card-feat{
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;
+  text-transform:uppercase;color:rgba(200,205,214,0.45);
+  display:flex;align-items:center;gap:8px;
+}
+.card-feat::before{content:'';display:block;width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.card-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:8px 14px;border:1px solid;
+  margin-top:24px;
+  position:relative;z-index:1;
+  align-self:flex-start;
+}
+.card-arrow{
+  display:none;
+}
+
+/* HOME FOOTER BAR */
+.home-footer-bar{
+  border-top:1px solid rgba(245,200,0,0.08);
+  padding:20px 48px;display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:2;
+}
+.home-footer-text{font-size:11px;letter-spacing:2px;color:rgba(200,205,214,0.2);text-transform:uppercase;}
+
+/* ══════════════════
+   HERO (páginas producto)
+══════════════════ */
+.hero{min-height:55vh;display:flex;align-items:center;position:relative;overflow:hidden;padding-top:70px;}
+.hero-bg{position:absolute;inset:0;}
+.hero-bg.latex-bg{background:radial-gradient(ellipse 60% 70% at 80% 50%,rgba(215,43,43,0.09) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(245,200,0,0.05) 0%,transparent 60%),linear-gradient(160deg,#0A0A0A 0%,#111317 50%,#0D0F12 100%);}
+.hero-bg.profesional-bg{background:radial-gradient(ellipse 60% 70% at 80% 50%,rgba(232,114,12,0.1) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(245,200,0,0.05) 0%,transparent 60%),linear-gradient(160deg,#0A0A0A 0%,#12100A 50%,#0E0B07 100%);}
+.hero-bg.premium-bg{background:radial-gradient(ellipse 60% 70% at 80% 50%,rgba(196,30,106,0.1) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(232,53,122,0.05) 0%,transparent 60%),linear-gradient(160deg,#0A0A0A 0%,#120810 50%,#0E070C 100%);}
+.hero-bg.enduido-bg{background:radial-gradient(ellipse 60% 70% at 80% 50%,rgba(58,158,111,0.1) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(93,201,140,0.06) 0%,transparent 60%),linear-gradient(160deg,#0A0A0A 0%,#0e1410 50%,#0A0E0C 100%);}
+.hero-bg::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(-55deg,transparent,transparent 80px,rgba(245,200,0,0.012) 80px,rgba(245,200,0,0.012) 81px);}
+.hero-inner{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:70px 48px;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:4px;text-transform:uppercase;margin-bottom:18px;}
+.hero-eyebrow.latex    {color:var(--amarillo);}
+.hero-eyebrow.latex::before    {content:'';display:block;width:30px;height:2px;background:var(--amarillo);}
+.hero-eyebrow.profesional{color:var(--naranja-prof);}
+.hero-eyebrow.profesional::before{content:'';display:block;width:30px;height:2px;background:var(--naranja-prof);}
+.hero-eyebrow.premium  {color:var(--magenta-claro);}
+.hero-eyebrow.premium::before  {content:'';display:block;width:30px;height:2px;background:var(--magenta-claro);}
+.hero-eyebrow.enduido  {color:var(--verde-claro);}
+.hero-eyebrow.enduido::before  {content:'';display:block;width:30px;height:2px;background:var(--verde-claro);}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(56px,9vw,100px);line-height:0.9;text-transform:uppercase;margin-bottom:24px;letter-spacing:-1px;}
+.hero h1 em.latex-em      {font-style:normal;color:transparent;-webkit-text-stroke:2px var(--rojo);display:block;}
+.hero h1 em.profesional-em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--naranja-prof);display:block;}
+.hero h1 em.premium-em    {font-style:normal;color:transparent;-webkit-text-stroke:2px var(--magenta);display:block;}
+.hero h1 em.enduido-em    {font-style:normal;color:transparent;-webkit-text-stroke:2px var(--verde-enduido);display:block;}
+.hero-desc{font-size:15px;line-height:1.7;color:var(--gris-texto);font-weight:300;max-width:480px;margin-bottom:28px;}
+
+/* Badges de características en hero */
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.hero-badge{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border:1px solid;
+}
+.latex-badge    {color:var(--amarillo);border-color:rgba(245,200,0,0.25);background:rgba(245,200,0,0.06);}
+.profesional-badge{color:var(--naranja-prof);border-color:rgba(232,114,12,0.25);background:rgba(232,114,12,0.06);}
+.premium-badge  {color:var(--magenta-claro);border-color:rgba(232,53,122,0.25);background:rgba(196,30,106,0.06);}
+.enduido-badge  {color:var(--verde-claro);border-color:rgba(58,158,111,0.25);background:rgba(58,158,111,0.06);}
+
+/* ——— SECCIONES ——— */
+.section{max-width:1200px;margin:0 auto;padding:90px 48px;}
+.section-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:4px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-label.latex    {color:var(--amarillo);}
+.section-label.latex::before    {content:'';display:block;width:24px;height:2px;background:var(--amarillo);}
+.section-label.profesional{color:var(--naranja-prof);}
+.section-label.profesional::before{content:'';display:block;width:24px;height:2px;background:var(--naranja-prof);}
+.section-label.premium  {color:var(--magenta-claro);}
+.section-label.premium::before  {content:'';display:block;width:24px;height:2px;background:var(--magenta-claro);}
+.section-label.enduido  {color:var(--verde-claro);}
+.section-label.enduido::before  {content:'';display:block;width:24px;height:2px;background:var(--verde-claro);}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(32px,5vw,52px);text-transform:uppercase;line-height:1;margin-bottom:44px;letter-spacing:-0.5px;}
+
+.divider-latex      {height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,0,0.2),transparent);margin:0 48px;}
+.divider-profesional{height:1px;background:linear-gradient(90deg,transparent,rgba(232,114,12,0.2),transparent);margin:0 48px;}
+.divider-premium    {height:1px;background:linear-gradient(90deg,transparent,rgba(196,30,106,0.2),transparent);margin:0 48px;}
+.divider-enduido    {height:1px;background:linear-gradient(90deg,transparent,rgba(58,158,111,0.25),transparent);margin:0 48px;}
+
+/* ——— GRILLA PASOS ——— */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.steps-grid.latex-grid      {background:rgba(245,200,0,0.05);border:1px solid rgba(245,200,0,0.08);}
+.steps-grid.profesional-grid{background:rgba(232,114,12,0.05);border:1px solid rgba(232,114,12,0.1);}
+.steps-grid.premium-grid    {background:rgba(196,30,106,0.05);border:1px solid rgba(196,30,106,0.1);}
+.steps-grid.enduido-grid    {background:rgba(58,158,111,0.05);border:1px solid rgba(58,158,111,0.1);}
+.step{background:var(--gris-oscuro);padding:32px 26px;position:relative;border-bottom:3px solid transparent;transition:border-color 0.3s,background 0.3s;}
+.step:hover{background:var(--gris-medio);}
+.latex-grid       .step:hover{border-bottom-color:var(--rojo);}
+.profesional-grid .step:hover{border-bottom-color:var(--naranja-prof);}
+.premium-grid     .step:hover{border-bottom-color:var(--magenta);}
+.enduido-grid     .step:hover{border-bottom-color:var(--verde-enduido);}
+.step-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:68px;line-height:1;position:absolute;top:14px;right:18px;transition:color 0.3s;}
+.latex-grid       .step-num{color:rgba(245,200,0,0.06);}
+.profesional-grid .step-num{color:rgba(232,114,12,0.07);}
+.premium-grid     .step-num{color:rgba(196,30,106,0.07);}
+.enduido-grid     .step-num{color:rgba(58,158,111,0.07);}
+.latex-grid       .step:hover .step-num{color:rgba(215,43,43,0.13);}
+.profesional-grid .step:hover .step-num{color:rgba(232,114,12,0.14);}
+.premium-grid     .step:hover .step-num{color:rgba(196,30,106,0.14);}
+.enduido-grid     .step:hover .step-num{color:rgba(93,201,140,0.14);}
+.step-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:18px;border:1px solid;overflow:visible;}
+.step-icon svg{width:22px;height:22px;display:block;}
+.latex-grid .step-icon svg{color:#D72B2B;}
+.profesional-grid .step-icon svg{color:#E8720C;}
+.premium-grid .step-icon svg{color:#C41E6A;}
+.enduido-grid .step-icon svg{color:#3A9E6F;}
+.safety-item-icon svg{display:block;}
+.safety-icon svg{display:block;}
+.safety-obs-icon svg{display:block;}
+.latex-grid       .step-icon{background:rgba(215,43,43,0.1);border-color:rgba(215,43,43,0.25);}
+.profesional-grid .step-icon{background:rgba(232,114,12,0.1);border-color:rgba(232,114,12,0.25);}
+.premium-grid     .step-icon{background:rgba(196,30,106,0.1);border-color:rgba(196,30,106,0.25);}
+.enduido-grid     .step-icon{background:rgba(58,158,111,0.1);border-color:rgba(58,158,111,0.25);}
+.step h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;color:var(--blanco);}
+.step p{font-size:13px;line-height:1.6;color:var(--gris-texto);font-weight:300;}
+
+/* ——— TIPS ——— */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;}
+.tip{padding:22px 26px;background:var(--gris-oscuro);}
+.tip.latex-tip      {border-left:3px solid var(--rojo);}
+.tip.latex-warning  {border-left:3px solid var(--amarillo);}
+.tip.latex-info     {border-left:3px solid var(--azul-acento);}
+.tip.prof-tip       {border-left:3px solid var(--naranja-prof);}
+.tip.prof-warning   {border-left:3px solid var(--amarillo);}
+.tip.prof-info      {border-left:3px solid var(--azul-acento);}
+.tip.prem-tip       {border-left:3px solid var(--magenta);}
+.tip.prem-warning   {border-left:3px solid var(--amarillo);}
+.tip.prem-info      {border-left:3px solid var(--azul-acento);}
+.tip.enduido-tip    {border-left:3px solid var(--verde-enduido);}
+.tip.enduido-warning{border-left:3px solid var(--amarillo);}
+.tip.enduido-info   {border-left:3px solid var(--azul-acento);}
+.tip-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.tip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.tip.latex-tip      .tip-dot{background:var(--rojo);}
+.tip.latex-warning  .tip-dot{background:var(--amarillo);}
+.tip.latex-info     .tip-dot{background:var(--azul-acento);}
+.tip.prof-tip       .tip-dot{background:var(--naranja-prof);}
+.tip.prof-warning   .tip-dot{background:var(--amarillo);}
+.tip.prof-info      .tip-dot{background:var(--azul-acento);}
+.tip.prem-tip       .tip-dot{background:var(--magenta-claro);}
+.tip.prem-warning   .tip-dot{background:var(--amarillo);}
+.tip.prem-info      .tip-dot{background:var(--azul-acento);}
+.tip.enduido-tip    .tip-dot{background:var(--verde-enduido);}
+.tip.enduido-warning.tip-dot{background:var(--amarillo);}
+.tip.enduido-info   .tip-dot{background:var(--azul-acento);}
+.tip h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--blanco);}
+.tip p{font-size:13px;line-height:1.6;color:var(--gris-texto);font-weight:300;}
+
+/* Tabla de datos técnicos */
+.data-table{width:100%;border-collapse:collapse;}
+.data-table tr{border-bottom:1px solid rgba(255,255,255,0.04);}
+.data-table td{padding:12px 16px;font-size:13px;line-height:1.5;}
+.data-table td:first-child{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:rgba(200,205,214,0.5);width:44%;}
+.data-table td:last-child{color:var(--blanco);font-weight:400;}
+.data-table tr:nth-child(even){background:rgba(255,255,255,0.02);}
+
+/* ——— FOOTER ——— */
+footer{border-top:1px solid;padding:40px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;background:var(--gris-oscuro);}
+footer.latex-footer      {border-color:rgba(245,200,0,0.1);}
+footer.profesional-footer{border-color:rgba(232,114,12,0.1);}
+footer.premium-footer    {border-color:rgba(196,30,106,0.1);}
+footer.enduido-footer    {border-color:rgba(58,158,111,0.12);}
+.footer-logo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:1px;color:var(--blanco);}
+.footer-logo span.ls{color:var(--amarillo);}
+.footer-logo span.ps{color:var(--naranja-prof);}
+.footer-logo span.prs{color:var(--magenta-claro);}
+.footer-logo span.es{color:var(--verde-claro);}
+.footer-sub{font-size:10px;letter-spacing:3px;color:rgba(200,205,214,0.35);text-transform:uppercase;margin-top:2px;}
+.footer-right{font-size:11px;color:rgba(200,205,214,0.25);text-align:right;line-height:1.9;}
+
+.footer-nav-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;padding:9px 18px;border:1px solid;
+  cursor:pointer;transition:all 0.25s;background:transparent;
+}
+.footer-nav-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;}
+.footer-nav-btn.to-home{color:var(--amarillo);border-color:rgba(245,200,0,0.3);}
+.footer-nav-btn.to-home:hover{background:rgba(245,200,0,0.08);}
+
+.hero-spatula{
+  position:absolute;right:8%;top:50%;transform:translateY(-50%) rotate(-18deg);
+  width:160px;opacity:0.7;z-index:1;
+  pointer-events:none;
+}
+@media(max-width:768px){
+  .hero-spatula{width:90px;right:4%;opacity:0.4;}
+}
+
+/* ——— ACORDEÓN SEGURIDAD ——— */
+.safety-section{max-width:1200px;margin:0 auto;padding:0 48px 80px;}
+.safety-toggle{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:20px 28px;background:var(--gris-oscuro);border:none;
+  cursor:pointer;text-align:left;gap:16px;
+  transition:background 0.25s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.safety-toggle:hover{background:var(--gris-medio);}
+.safety-toggle-left{display:flex;align-items:center;gap:14px;}
+.safety-icon{font-size:18px;flex-shrink:0;color:rgba(200,205,214,0.6);display:flex;align-items:center;}
+.safety-toggle-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--blanco);
+}
+.safety-toggle-sub{
+  font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;color:rgba(200,205,214,0.35);
+  margin-top:2px;
+}
+.safety-chevron{
+  width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,0.1);transition:transform 0.3s;
+}
+.safety-chevron svg{width:14px;height:14px;stroke:rgba(200,205,214,0.5);fill:none;stroke-width:2.5;}
+.safety-toggle.open .safety-chevron{transform:rotate(180deg);}
+.safety-latex .safety-toggle{border-left:3px solid var(--rojo);}
+.safety-profesional .safety-toggle{border-left:3px solid var(--naranja-prof);}
+.safety-premium .safety-toggle{border-left:3px solid var(--magenta);}
+.safety-enduido .safety-toggle{border-left:3px solid var(--verde-enduido);}
+.safety-body{
+  display:none;background:rgba(255,255,255,0.02);
+  border-left:3px solid transparent;border-right:1px solid rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.safety-latex .safety-body{border-left-color:var(--rojo);}
+.safety-profesional .safety-body{border-left-color:var(--naranja-prof);}
+.safety-premium .safety-body{border-left-color:var(--magenta);}
+.safety-enduido .safety-body{border-left-color:var(--verde-enduido);}
+.safety-body.open{display:block;}
+.safety-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;}
+.safety-item{padding:24px 28px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.safety-item:nth-child(odd){border-right:1px solid rgba(255,255,255,0.04);}
+.safety-item-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.safety-item-icon{font-size:16px;color:rgba(200,205,214,0.55);display:flex;align-items:center;}
+.safety-item-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--blanco);
+}
+.safety-item p{font-size:13px;line-height:1.65;color:var(--gris-texto);font-weight:300;}
+.safety-item strong{color:rgba(245,200,0,0.9);font-weight:600;}
+.safety-obs{
+  padding:20px 28px;border-top:1px solid rgba(255,255,255,0.06);
+  background:rgba(245,200,0,0.03);
+  display:flex;align-items:flex-start;gap:12px;
+}
+.safety-obs-icon{font-size:15px;flex-shrink:0;margin-top:2px;color:rgba(200,205,214,0.4);display:flex;}
+.safety-obs p{font-size:12px;line-height:1.65;color:rgba(200,205,214,0.6);font-weight:300;}
+.safety-obs strong{color:rgba(200,205,214,0.85);font-weight:600;}
+/* ——— RESPONSIVE ——— */
+@media(max-width:1024px){
+  .navbar{padding:0 20px;}
+  .products-grid{grid-template-columns:repeat(2,1fr);padding:0 20px 40px;}
+  .product-card{min-height:300px;padding:28px 20px 24px;}
+  .card-num{font-size:72px;}
+}
+@media(max-width:640px){
+  .navbar{padding:0 12px;height:56px;}
+  .brand-name{font-size:16px;}
+  .brand-tagline{font-size:8px;letter-spacing:2px;}
+  .nav-right{gap:4px;}
+  .nav-pill{font-size:9px;padding:6px 9px;letter-spacing:0.5px;min-height:32px;}
+  .nav-home-btn{padding:6px 9px;font-size:9px;letter-spacing:1px;}
+  .home-content{padding-top:56px;}
+  .home-hero{padding:32px 16px 18px;}
+  .home-title{font-size:clamp(38px,12vw,58px);}
+  .home-subtitle{font-size:12px;letter-spacing:2px;margin-bottom:20px;}
+  .home-cta-label{font-size:9px;letter-spacing:2px;}
+  .products-grid{grid-template-columns:1fr 1fr;gap:2px;padding:0 10px 24px;}
+  .product-card{min-height:190px;padding:16px 12px 14px;}
+  .card-num{font-size:48px;top:5px;right:7px;}
+  .card-icon-wrap{width:30px;height:30px;font-size:13px;margin-bottom:8px;}
+  .card-category{font-size:8px;letter-spacing:1.5px;margin-bottom:4px;}
+  .card-name{font-size:18px;margin-bottom:6px;}
+  .card-line{margin-bottom:6px;width:24px;}
+  .card-desc{display:none;}
+  .card-features{display:none;}
+  .card-tag{font-size:8px;padding:5px 9px;letter-spacing:1px;margin-top:auto;}
+  .hero{min-height:auto;padding-top:56px;}
+  .hero-inner{padding:32px 16px;}
+  .hero h1{font-size:clamp(42px,12vw,58px);}
+  .hero-desc{font-size:13px;margin-bottom:20px;}
+  .hero-badges{gap:5px;margin-bottom:8px;}
+  .hero-badge{font-size:8px;padding:4px 8px;letter-spacing:1px;}
+  .section{padding:32px 12px;}
+  .section-title{font-size:clamp(24px,8vw,36px);margin-bottom:24px;}
+  .section-label{font-size:9px;}
+  .steps-grid{grid-template-columns:1fr;gap:2px;}
+  .step{padding:24px 16px;}
+  .tips-grid{grid-template-columns:1fr;gap:8px;}
+  .tip{padding:16px 14px;}
+  .divider-latex,.divider-profesional,.divider-premium,.divider-enduido{margin:0 12px;}
+  footer{padding:18px 12px;flex-direction:column;align-items:flex-start;gap:12px;}
+  .footer-right{text-align:left;}
+  .footer-nav-btn{width:100%;justify-content:center;padding:10px;}
+  .home-footer-bar{padding:12px;flex-direction:column;gap:4px;text-align:center;}
+}
 </style>
 </head>
 <body>
- 
-<!-- ═══════════════════ NAVBAR (compartida) ═══════════════════ -->
+
+<!-- ═══════════════════ NAVBAR ═══════════════════ -->
 <nav class="navbar">
-  <div class="brand" onclick="goTo('latex')">
- 
+  <div class="brand" onclick="goTo('home')">
     <div class="brand-text">
       <div class="brand-name">HOGAR<span>&amp;</span>OBRA</div>
       <div class="brand-tagline">Guías de Aplicación</div>
     </div>
   </div>
   <div class="nav-right">
-    <div class="nav-switcher">
-      <button class="nav-switch-btn active-latex" id="btn-latex" onclick="goTo('latex')">Látex</button>
-      <button class="nav-switch-btn" id="btn-enduido" onclick="goTo('enduido')">Enduido</button>
-    </div>
+    <button class="nav-home-btn" onclick="goTo('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Inicio
+    </button>
+    <button class="nav-pill" id="btn-latex"        onclick="goTo('latex')">Látex</button>
+    <button class="nav-pill" id="btn-profesional"  onclick="goTo('profesional')">Profesional</button>
+    <button class="nav-pill" id="btn-premium"      onclick="goTo('premium')">Premium</button>
+    <button class="nav-pill" id="btn-enduido"      onclick="goTo('enduido')">Enduido</button>
   </div>
 </nav>
- 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- PAGE: LÁTEX -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div class="page active" id="page-latex">
- 
+
+<!-- ═══════════════════════════════════════════════
+     HOME PAGE
+═══════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="home-bg"></div>
+  <div class="home-grid-lines"></div>
+  <div class="home-scan-line"></div>
+
+  <div class="home-content">
+    <div class="home-hero">
+      <div class="home-eyebrow">Pinturas — Guías oficiales de aplicación</div>
+      <h1 class="home-title">
+        <span class="line1">HOGAR</span>
+        <span class="line2">&amp; OBRA</span>
+      </h1>
+      <p class="home-subtitle">Pinturas — Rosario, Argentina</p>
+      <div class="home-cta-label">Seleccioná el producto</div>
+    </div>
+
+    <div class="products-grid">
+
+      <!-- LÁTEX ESTÁNDAR -->
+      <div class="product-card card-latex" onclick="goTo('latex')">
+        <span class="card-num">01</span>
+        
+        <div class="card-category">Látex Acrílico</div>
+        <div class="card-name">Látex<br>Estándar</div>
+        <div class="card-line"></div>
+        <p class="card-desc">Pintura látex acrílica para interiores y exteriores. Excelente cobertura, rápido secado y fácil aplicación.</p>
+        <div class="card-features">
+          <div class="card-feat">Interior / Exterior</div>
+          <div class="card-feat">Base acrílica</div>
+          <div class="card-feat">Secado 2 – 8 hs</div>
+        </div>
+        <div class="card-tag">Ver guía →</div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
+
+      <!-- LÁTEX PROFESIONAL -->
+      <div class="product-card card-profesional" onclick="goTo('profesional')">
+        <span class="card-num">02</span>
+        
+        <div class="card-category">Alta Performance</div>
+        <div class="card-name">Látex<br>Profesional</div>
+        <div class="card-line"></div>
+        <p class="card-desc">Base estireno-acrílica con poliuretano. Doble uso interior y exterior con resistencia UV y barrera climática superior.</p>
+        <div class="card-features">
+          <div class="card-feat">Interior + Exterior</div>
+          <div class="card-feat">Con poliuretano</div>
+          <div class="card-feat">Resistencia UV</div>
+        </div>
+        <div class="card-tag">Ver guía →</div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
+
+      <!-- LÁTEX PREMIUM -->
+      <div class="product-card card-premium" onclick="goTo('premium')">
+        <span class="card-num">03</span>
+        
+        <div class="card-category">Línea Premium</div>
+        <div class="card-name">Látex<br>Premium</div>
+        <div class="card-line"></div>
+        <p class="card-desc">Fórmula acrílica de alta gama con máximo poder cubritivo, antihongos y lavable. Ideal para ambientes exigentes.</p>
+        <div class="card-features">
+          <div class="card-feat">Interior — lavable</div>
+          <div class="card-feat">Antihongos</div>
+          <div class="card-feat">Máximo cubritivo</div>
+        </div>
+        <div class="card-tag">Ver guía →</div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
+
+      <!-- ENDUIDO -->
+      <div class="product-card card-enduido" onclick="goTo('enduido')">
+        <span class="card-num">04</span>
+        
+        <div class="card-category">Terminación</div>
+        <div class="card-name">Enduido<br>Plástico</div>
+        <div class="card-line"></div>
+        <p class="card-desc">Enduido listo para usar. Rellena y nivela paredes interiores para una terminación perfecta antes del látex.</p>
+        <div class="card-features">
+          <div class="card-feat">Solo interior</div>
+          <div class="card-feat">Listo para usar</div>
+          <div class="card-feat">2–3 manos</div>
+        </div>
+        <div class="card-tag">Ver guía →</div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
+
+    </div>
+
+    <div class="home-footer-bar">
+      <div class="home-footer-text">© Hogar &amp; Obra — Todos los derechos reservados</div>
+      <div class="home-footer-text">Interior &amp; Exterior — Uso profesional y doméstico</div>
+    </div>
+  </div>
+</div><!-- /page-home -->
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: LÁTEX ESTÁNDAR
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-latex">
+
   <section class="hero">
     <div class="hero-bg latex-bg"></div>
     <div class="hero-inner">
       <div class="hero-eyebrow latex">HOGAR &amp; OBRA — Guía oficial de aplicación</div>
       <h1>Pintura<br><em class="latex-em">Látex</em></h1>
-      <p class="hero-desc">Todo lo que necesitás saber para lograr un acabado profesional, duradero y sin errores. Interior y exterior.</p>
+      <div class="hero-badges">
+        <span class="hero-badge latex-badge">Interior / Exterior</span>
+        <span class="hero-badge latex-badge">Base acrílica</span>
+        <span class="hero-badge latex-badge">Secado al tacto 2 hs</span>
+        <span class="hero-badge latex-badge">12–16 m²/lt</span>
+      </div>
+      <p class="hero-desc">Todo lo que necesitás saber para lograr un acabado profesional, duradero y sin errores.</p>
     </div>
   </section>
- 
+
   <div class="divider-latex"></div>
- 
+
   <section class="section">
     <div class="section-label latex">Paso a paso</div>
     <div class="section-title">Proceso de<br>Aplicación</div>
     <div class="steps-grid latex-grid">
-      <div class="step">
-        <span class="step-num">01</span>
-        <div class="step-icon">🧹</div>
-        <h3>Preparación de la superficie</h3>
-        <p>Limpiá la superficie eliminando polvo, grasa y suciedad. Reparar grietas con masilla y lijá para nivelar. La superficie debe estar seca y firme.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">02</span>
-        <div class="step-icon">🖌️</div>
-        <h3>Fondo sellador</h3>
-        <p>Aplicá una mano de fijador o sellador. Esto mejora la adherencia y el rendimiento de la pintura terminada.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">03</span>
-        <div class="step-icon">⏱️</div>
-        <h3>Tiempo de secado</h3>
-        <p>Esperá entre 2 y 4 horas antes de aplicar el látex. Con humedad alta o baja temperatura, extendé el tiempo de espera.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">04</span>
-        <div class="step-icon">🎨</div>
-        <h3>Primera mano</h3>
-        <p>Si es necesario, ajustá su dilución con agua limpia. Aplicá en forma cruzada (vertical y horizontal) para una cobertura pareja.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">05</span>
-        <div class="step-icon">✅</div>
-        <h3>Segunda mano</h3>
-        <p>Después de 4–6 hs, aplicá la segunda mano sin dilución o con un máximo de 5% de agua. Usá siempre el mismo sentido de pincelada.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">06</span>
-        <div class="step-icon">🏁</div>
-        <h3>Acabado final</h3>
-        <p>Retirá cintas de enmascarar antes del secado total. El secado definitivo ocurre a las 24–48 hs según temperatura y humedad ambiente.</p>
-      </div>
+      <div class="step"><span class="step-num">01</span><h3>Preparación de la superficie</h3><p>Limpiá la superficie eliminando polvo, grasa y suciedad. Reparar grietas con masilla y lijá para nivelar. La superficie debe estar seca y firme.</p></div>
+      <div class="step"><span class="step-num">02</span><h3>Fondo sellador</h3><p>Aplicá una mano de fijador o sellador. Esto mejora la adherencia y el rendimiento de la pintura terminada.</p></div>
+      <div class="step"><span class="step-num">03</span><h3>Tiempo de secado</h3><p>Esperá entre 2 y 4 horas antes de aplicar el látex. Con humedad alta o baja temperatura, extendé el tiempo de espera.</p></div>
+      <div class="step"><span class="step-num">04</span><h3>Primera mano</h3><p>Si es necesario, dilución mínima con agua limpia. Aplicá en forma cruzada (vertical y horizontal) para una cobertura pareja.</p></div>
+      <div class="step"><span class="step-num">05</span><h3>Segunda mano</h3><p>Después de 4–6 hs, aplicá la segunda mano sin dilución o con un máximo de 5% de agua. Usá siempre el mismo sentido de pincelada.</p></div>
+      <div class="step"><span class="step-num">06</span><h3>Acabado final</h3><p>Retirá cintas de enmascarar antes del secado total. El secado definitivo ocurre a las 24–48 hs según temperatura y humedad ambiente.</p></div>
     </div>
   </section>
- 
+
   <div class="divider-latex"></div>
- 
+
+  <section class="section">
+    <div class="section-label latex">Datos técnicos</div>
+    <div class="section-title">Ficha<br>Técnica</div>
+    <table class="data-table">
+      <tr><td>Rendimiento teórico</td><td>12 a 16 m² por litro por mano</td></tr>
+      <tr><td>Uso</td><td>Paredes interiores y exteriores — concreto, mampostería, yeso</td></tr>
+      <tr><td>Secado al tacto</td><td>2 horas (HRA 60%, 25°C)</td></tr>
+      <tr><td>Secado entre manos</td><td>8 horas</td></tr>
+      <tr><td>N° de manos</td><td>2 a 3 según protección deseada</td></tr>
+      <tr><td>Dilución</td><td>Listo para usar. Mínima cantidad de agua si es necesario</td></tr>
+      <tr><td>Presentación</td><td>Envases de 1, 4, 10 y 20 litros</td></tr>
+      <tr><td>Terminación</td><td>Mate</td></tr>
+      <tr><td>Temperatura de aplicación</td><td>10°C a 40°C</td></tr>
+      <tr><td>Limpieza de herramientas</td><td>Agua y detergente biodegradable</td></tr>
+    </table>
+  </section>
+
+  <div class="divider-latex"></div>
+
   <section class="section">
     <div class="section-label latex">Consejos profesionales</div>
     <div class="section-title">Tips &amp;<br>Advertencias</div>
     <div class="tips-grid">
-      <div class="tip latex-tip">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Temperatura óptima</h4></div>
-        <p>Aplicá entre 10°C y 35°C. Evitá pintar bajo el sol directo o en días muy húmedos. La temperatura ideal es entre 18°C y 25°C.</p>
-      </div>
-      <div class="tip latex-warning">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Humedad alta</h4></div>
-        <p>Con humedad superior al 80%, la pintura puede demorar más en secar y presentar escurridos. Ventilá bien el ambiente.</p>
-      </div>
-      <div class="tip latex-info">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Herramientas limpias</h4></div>
-        <p>Limpiar rodillos y brochas con agua antes del secado total. Una vez seco el látex, el agua no alcanza para limpiar.</p>
-      </div>
-      <div class="tip latex-tip">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Superficies nuevas</h4></div>
-        <p>En revoques nuevos, esperá al menos 28 días antes de pintar para que el cemento complete su proceso de carbonatación.</p>
-      </div>
-      <div class="tip latex-warning">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Manchas de humedad</h4></div>
-        <p>Tratá las manchas de humedad con productos específicos antes de aplicar el látex. Pintar sobre humedad activa arruina el trabajo.</p>
-      </div>
-      <div class="tip latex-info">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Almacenamiento</h4></div>
-        <p>Guardá el envase bien tapado en lugar fresco y seco. No expongas al sol ni a heladas. Vida útil: 12 a 24 meses.</p>
-      </div>
+      <div class="tip latex-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Temperatura óptima</h4></div><p>Aplicá entre 10°C y 35°C. Evitá pintar bajo el sol directo o en días muy húmedos. La temperatura ideal es entre 18°C y 25°C.</p></div>
+      <div class="tip latex-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Humedad alta</h4></div><p>Con humedad superior al 80%, la pintura puede demorar más en secar y presentar escurridos. Ventilá bien el ambiente.</p></div>
+      <div class="tip latex-info"><div class="tip-head"><div class="tip-dot"></div><h4>Herramientas limpias</h4></div><p>Limpiar rodillos y brochas con agua antes del secado total. Una vez seco el látex, el agua no alcanza para limpiar.</p></div>
+      <div class="tip latex-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Superficies nuevas</h4></div><p>En revoques nuevos, esperá al menos 28 días antes de pintar para que el cemento complete su proceso de carbonatación.</p></div>
+      <div class="tip latex-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Manchas de humedad</h4></div><p>Tratá las manchas de humedad con productos específicos antes de aplicar el látex. Pintar sobre humedad activa arruina el trabajo.</p></div>
+      <div class="tip latex-info"><div class="tip-head"><div class="tip-dot"></div><h4>Almacenamiento</h4></div><p>Guardá el envase bien tapado en lugar fresco y seco. No expongas al sol ni a heladas. Revolvé bien antes de usar.</p></div>
     </div>
   </section>
- 
-  <footer class="latex-footer">
-    <div>
-      <div class="footer-logo">HOGAR&amp;<span class="latex-span">OBRA</span></div>
-      <div class="footer-sub">Pintura Látex — Guía oficial</div>
-    </div>
-    <button class="footer-nav-btn to-enduido" onclick="goTo('enduido')">
-      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-      Ver guía de Enduido
+
+  <div class="divider-latex"></div>
+
+  <div class="safety-section safety-latex">
+    <button class="safety-toggle" onclick="toggleSafety(this)" aria-expanded="false">
+      <div class="safety-toggle-left">
+        
+        <div>
+          <div class="safety-toggle-title">Seguridad &amp; Primeros Auxilios</div>
+          <div class="safety-toggle-sub">Información de seguridad del producto</div>
+        </div>
+      </div>
+      <div class="safety-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
     </button>
+    <div class="safety-body">
+      <div class="safety-grid">
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con los ojos</div></div>
+          <p>Enjuagar con abundante agua corriente de forma continua durante al menos <strong>15 minutos</strong>. Retirar lentes de contacto si los hubiera. Consultar a un médico.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con la piel</div></div>
+          <p>Lavar con abundante agua y jabón neutro la zona afectada. En presencia de heridas, <strong>no usar solventes ni diluyentes</strong> para remover restos de pintura.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Inhalación</div></div>
+          <p>Trasladar a la persona a un lugar ventilado y con aire fresco. Si los síntomas persisten o hay pérdida del conocimiento, <strong>llamar al servicio de emergencias de inmediato</strong>.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Ingestión</div></div>
+          <p><strong>No provocar el vómito.</strong> Acudir a un centro de salud de inmediato y llevar el envase del producto para facilitar la atención médica.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Incendio</div></div>
+          <p>Producto <strong>no combustible</strong>. No requiere medidas especiales de extinción. En caso de incendio en el entorno, usar agua o agente extintor convencional.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Derrame accidental</div></div>
+          <p><strong>Pequeños:</strong> dejar secar y retirar mecánicamente. <strong>Grandes:</strong> contener con arena o material absorbente y retirar por barrido. Evitar que llegue a desagües.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Almacenamiento</div></div>
+          <p>Guardar en lugar ventilado, fresco y seco, lejos de niños y animales. <strong>No apilar más de 1,5 m de altura.</strong> Mantener alejado de desagües y cámaras cloacales.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Protección personal</div></div>
+          <p>Durante la aplicación usar: <strong>guantes impermeables, protección ocular y ropa adecuada.</strong> En interiores, asegurar buena ventilación. Mantener envases cerrados cuando no se usen.</p>
+        </div>
+      </div>
+      <div class="safety-obs">
+        
+        <p><strong>Nota:</strong> Si hay heridas o lastimaduras en zonas próximas al área de trabajo, asegurarse de cubrirlas e impermeabilizarlas correctamente antes de comenzar la aplicación.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="latex-footer">
+    <div><div class="footer-logo">HOGAR&amp;<span class="ls">OBRA</span></div><div class="footer-sub">Pintura Látex — Guía oficial</div></div>
+    <button class="footer-nav-btn to-home" onclick="goTo('home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Volver al inicio</button>
     <div class="footer-right">Interior &amp; Exterior — Uso profesional<br>© Hogar &amp; Obra — Todos los derechos reservados</div>
   </footer>
- 
+
 </div><!-- /page-latex -->
- 
- 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- PAGE: ENDUIDO -->
-<!-- ═══════════════════════════════════════════════════════ -->
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: LÁTEX PROFESIONAL
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-profesional">
+
+  <section class="hero">
+    <div class="hero-bg profesional-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow profesional">HOGAR &amp; OBRA — Guía oficial de aplicación</div>
+      <h1>Látex<br><em class="profesional-em">Profesional</em></h1>
+      <div class="hero-badges">
+        <span class="hero-badge profesional-badge">Interior + Exterior</span>
+        <span class="hero-badge profesional-badge">Con poliuretano</span>
+        <span class="hero-badge profesional-badge">Resistencia UV</span>
+        <span class="hero-badge profesional-badge">Secado al tacto 2 hs</span>
+      </div>
+      <p class="hero-desc">Alta performance para interiores y exteriores. Base estireno-acrílica con poliuretano para máxima durabilidad y protección climática.</p>
+    </div>
+  </section>
+
+  <div class="divider-profesional"></div>
+
+  <section class="section">
+    <div class="section-label profesional">Paso a paso</div>
+    <div class="section-title">Proceso de<br>Aplicación</div>
+    <div class="steps-grid profesional-grid">
+      <div class="step"><span class="step-num">01</span><h3>Preparación de la superficie</h3><p>La superficie debe estar limpia, seca y libre de polvo, grasa, siliconas, óxido, algas u hongos. Eliminá cualquier material suelto o condición que dificulte la adherencia.</p></div>
+      <div class="step"><span class="step-num">02</span><h3>Fondo sellador</h3><p>Aplicá sellador fijador antes de comenzar. Este paso es clave para garantizar la adherencia y el rendimiento óptimo del látex profesional.</p></div>
+      <div class="step"><span class="step-num">03</span><h3>Tiempo de secado del fondo</h3><p>Esperá al secado completo del fijador. En exteriores, asegurate de que no haya lluvia inminente ni sol directo sobre la superficie antes de continuar.</p></div>
+      <div class="step"><span class="step-num">04</span><h3>Primera mano</h3><p>Aplicá a pincel, rodillo o soplete airless. El producto está listo para usar; si necesitás facilitar la aplicación, agregá la mínima cantidad de agua posible.</p></div>
+      <div class="step"><span class="step-num">05</span><h3>Segunda mano</h3><p>Esperá mínimo 8 horas entre manos. Aplicá la segunda mano en el mismo sentido que la primera para una terminación pareja y uniforme.</p></div>
+      <div class="step"><span class="step-num">06</span><h3>Tercera mano (opcional)</h3><p>En zonas de alta exigencia o superficies muy absorbentes, una tercera mano garantiza la protección máxima. Respetá siempre el tiempo de secado entre manos.</p></div>
+    </div>
+  </section>
+
+  <div class="divider-profesional"></div>
+
+  <section class="section">
+    <div class="section-label profesional">Datos técnicos</div>
+    <div class="section-title">Ficha<br>Técnica</div>
+    <table class="data-table">
+      <tr><td>Tipo de producto</td><td>Látex base estireno-acrílica con poliuretano</td></tr>
+      <tr><td>Uso</td><td>Interior y exterior — concreto, mampostería, yeso, placas de yeso</td></tr>
+      <tr><td>Rendimiento teórico</td><td>12 a 16 m² por litro por mano</td></tr>
+      <tr><td>Secado al tacto</td><td>2 horas (HRA 60%, 25°C)</td></tr>
+      <tr><td>Secado entre manos</td><td>8 horas</td></tr>
+      <tr><td>N° de manos</td><td>2 a 3 según el grado de protección deseada</td></tr>
+      <tr><td>Dilución</td><td>Listo para usar. Mínima agua si es necesario</td></tr>
+      <tr><td>Métodos de aplicación</td><td>Pincel, rodillo o soplete airless</td></tr>
+      <tr><td>Terminación</td><td>Mate</td></tr>
+      <tr><td>Temperatura de aplicación</td><td>10°C a 40°C — Evitar sol directo y riesgo de lluvia</td></tr>
+      <tr><td>Presentación</td><td>Envases de 1, 4, 10 y 20 litros</td></tr>
+    </table>
+  </section>
+
+  <div class="divider-profesional"></div>
+
+  <section class="section">
+    <div class="section-label profesional">Consejos profesionales</div>
+    <div class="section-title">Tips &amp;<br>Advertencias</div>
+    <div class="tips-grid">
+      <div class="tip prof-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Doble uso: clave del producto</h4></div><p>El Látex Profesional es apto tanto para interiores como exteriores. No uses un producto inferior para exteriores; la resistencia UV y climática marca la diferencia en el tiempo.</p></div>
+      <div class="tip prof-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Condiciones climáticas</h4></div><p>No aplicar con riesgo de lluvia inminente, ni cuando el sol incida directamente sobre la superficie. Temperatura de aplicación: 10°C a 40°C.</p></div>
+      <div class="tip prof-info"><div class="tip-head"><div class="tip-dot"></div><h4>Soplete airless</h4></div><p>Para grandes superficies exteriores o trabajos profesionales, el soplete airless da el mejor rendimiento y terminación. Ajustá la presión para evitar exceso de material.</p></div>
+      <div class="tip prof-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Algas y hongos en exterior</h4></div><p>Antes de pintar exteriores con presencia de organismos, tratá con fungicida específico. El Látex Profesional no actúa sobre infecciones preexistentes.</p></div>
+      <div class="tip prof-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Varios envases</h4></div><p>Si necesitás más de un envase para una misma superficie, mezclá los contenidos antes de empezar para garantizar uniformidad de color y terminación.</p></div>
+      <div class="tip prof-info"><div class="tip-head"><div class="tip-dot"></div><h4>Almacenamiento</h4></div><p>Guardá en lugar fresco y seco. Asegurar la hermeticidad del cierre si no se consumió todo el contenido. No exponer a heladas.</p></div>
+    </div>
+  </section>
+
+  <div class="divider-profesional"></div>
+
+  <div class="safety-section safety-profesional">
+    <button class="safety-toggle" onclick="toggleSafety(this)" aria-expanded="false">
+      <div class="safety-toggle-left">
+        
+        <div>
+          <div class="safety-toggle-title">Seguridad &amp; Primeros Auxilios</div>
+          <div class="safety-toggle-sub">Información de seguridad del producto</div>
+        </div>
+      </div>
+      <div class="safety-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </button>
+    <div class="safety-body">
+      <div class="safety-grid">
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con los ojos</div></div>
+          <p>Enjuagar con abundante agua corriente de forma continua durante al menos <strong>15 minutos</strong>. Retirar lentes de contacto. Consultar a un médico, especialmente si la irritación persiste.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con la piel</div></div>
+          <p>Lavar con agua y jabón neutro. <strong>No usar solventes ni diluyentes</strong> para remover restos, especialmente cerca de heridas o cortes. Si persiste irritación, consultar médico.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Inhalación</div></div>
+          <p>Llevar a la persona al exterior o a un ambiente bien ventilado. Aplicar en exteriores garantiza ventilación natural. Si los síntomas no ceden o hay desmayo, <strong>llamar al servicio de emergencias</strong>.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Ingestión</div></div>
+          <p><strong>No provocar el vómito bajo ninguna circunstancia.</strong> Buscar asistencia médica de inmediato y presentar el envase del producto al personal de salud.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Incendio</div></div>
+          <p>Producto <strong>no combustible ni inflamable</strong>. No requiere precauciones especiales de extinción. Ante incendio en el entorno, usar extintores convencionales o agua.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Derrame accidental</div></div>
+          <p><strong>Pequeño:</strong> dejar solidificar y retirar mecánicamente. <strong>Grande:</strong> contener con barreras de arena o material absorbente. Evitar el ingreso a desagües pluviales o cloacales.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Almacenamiento</div></div>
+          <p>Acopiar en lugar ventilado, alejado de niños y animales. <strong>No superar 1,5 m de altura en el apilado.</strong> Mantener los envases cerrados y alejados de fuentes de calor.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Protección personal</div></div>
+          <p>Usar <strong>guantes impermeables, protección ocular y ropa de trabajo</strong>. En espacios cerrados o poco ventilados, incorporar protección respiratoria. Ventilar siempre durante la aplicación interior.</p>
+        </div>
+      </div>
+      <div class="safety-obs">
+        
+        <p><strong>Nota:</strong> En trabajos en exterior, asegurarse de que no haya riesgo de lluvia y que la temperatura esté dentro del rango recomendado. Cubrir heridas o lastimaduras antes de comenzar.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="profesional-footer">
+    <div><div class="footer-logo">HOGAR&amp;<span class="ps">OBRA</span></div><div class="footer-sub">Látex Profesional — Guía oficial</div></div>
+    <button class="footer-nav-btn to-home" onclick="goTo('home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Volver al inicio</button>
+    <div class="footer-right">Interior &amp; Exterior — Alta performance<br>© Hogar &amp; Obra — Todos los derechos reservados</div>
+  </footer>
+
+</div><!-- /page-profesional -->
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: LÁTEX PREMIUM
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-premium">
+
+  <section class="hero">
+    <div class="hero-bg premium-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow premium">HOGAR &amp; OBRA — Guía oficial de aplicación</div>
+      <h1>Látex<br><em class="premium-em">Premium</em></h1>
+      <div class="hero-badges">
+        <span class="hero-badge premium-badge">Interior — lavable</span>
+        <span class="hero-badge premium-badge">Antihongos</span>
+        <span class="hero-badge premium-badge">Máximo cubritivo</span>
+        <span class="hero-badge premium-badge">Rápido secado</span>
+      </div>
+      <p class="hero-desc">Fórmula acrílica de alta gama con máxima blancura, alto poder cubritivo, antihongos y lavable. Para ambientes que exigen lo mejor.</p>
+    </div>
+  </section>
+
+  <div class="divider-premium"></div>
+
+  <section class="section">
+    <div class="section-label premium">Paso a paso</div>
+    <div class="section-title">Proceso de<br>Aplicación</div>
+    <div class="steps-grid premium-grid">
+      <div class="step"><span class="step-num">01</span><h3>Limpieza de la superficie</h3><p>Limpiá la superficie a pintar eliminando polvo, grasa, siliconas, óxido u hongos. El sustrato debe estar completamente seco y libre de material suelto.</p></div>
+      <div class="step"><span class="step-num">02</span><h3>Sellador fijador</h3><p>Aplicá sellador fijador antes de empezar. Es clave para la correcta adherencia y para aprovechar al máximo las propiedades del látex Premium.</p></div>
+      <div class="step"><span class="step-num">03</span><h3>Mezcla antes de usar</h3><p>Revolvé bien el contenido del envase antes de aplicar. Si usás más de un envase, mezclá sus contenidos para asegurar uniformidad de color y textura.</p></div>
+      <div class="step"><span class="step-num">04</span><h3>Primera mano</h3><p>Aplicá a pincel, rodillo o soplete airless de arriba hacia abajo. El producto está listo para usar; agregá agua solo si es estrictamente necesario para la aplicación.</p></div>
+      <div class="step"><span class="step-num">05</span><h3>Segunda mano</h3><p>Esperá mínimo 8 horas antes de la segunda mano. Gracias al alto poder cubritivo del Premium, en muchos casos dos manos son suficientes para una cobertura perfecta.</p></div>
+      <div class="step"><span class="step-num">06</span><h3>Verificación final</h3><p>Revisá con luz rasante para detectar cualquier zona sin cubrir. El acabado mate aterciopelado del Premium es visible al secar completamente, entre 24 y 48 hs.</p></div>
+    </div>
+  </section>
+
+  <div class="divider-premium"></div>
+
+  <section class="section">
+    <div class="section-label premium">Datos técnicos</div>
+    <div class="section-title">Ficha<br>Técnica</div>
+    <table class="data-table">
+      <tr><td>Tipo de producto</td><td>Látex acrílico interior de alta gama — lavable</td></tr>
+      <tr><td>Uso</td><td>Paredes interiores — concreto, mampostería, yeso, placas de yeso</td></tr>
+      <tr><td>Rendimiento teórico</td><td>12 a 16 m² por litro por mano</td></tr>
+      <tr><td>Secado al tacto</td><td>2 horas (HRA 60%, 25°C)</td></tr>
+      <tr><td>Secado entre manos</td><td>8 horas</td></tr>
+      <tr><td>N° de manos</td><td>2 a 3 según el grado de cobertura deseada</td></tr>
+      <tr><td>Dilución</td><td>Listo para usar. Mínima agua si es necesario</td></tr>
+      <tr><td>Métodos de aplicación</td><td>Pincel, rodillo o soplete airless</td></tr>
+      <tr><td>Terminación</td><td>Mate aterciopelado / Satinado (según variante)</td></tr>
+      <tr><td>Resistencia al lavado</td><td>Satisfactoria — apta para limpieza húmeda</td></tr>
+      <tr><td>Resistencia antihongos</td><td>Satisfactoria</td></tr>
+      <tr><td>Temperatura de aplicación</td><td>10°C a 40°C</td></tr>
+      <tr><td>Presentación</td><td>Envases de 1, 4, 10 y 20 litros</td></tr>
+    </table>
+  </section>
+
+  <div class="divider-premium"></div>
+
+  <section class="section">
+    <div class="section-label premium">Consejos profesionales</div>
+    <div class="section-title">Tips &amp;<br>Advertencias</div>
+    <div class="tips-grid">
+      <div class="tip prem-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Ideal para ambientes exigentes</h4></div><p>Por su fórmula antihongos y lavable, el Premium es la elección correcta para cocinas, baños con ventilación, clínicas, hospitales y espacios de alta circulación.</p></div>
+      <div class="tip prem-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Solo para interior</h4></div><p>El Látex Premium es de uso exclusivo interior. Para exteriores o zonas con exposición a la intemperie, usá el Látex Profesional.</p></div>
+      <div class="tip prem-info"><div class="tip-head"><div class="tip-dot"></div><h4>Lavado de paredes</h4></div><p>Esperá al menos 30 días desde la aplicación antes de lavar la pared. Usá agua con jabón neutro y esponja suave; evitá productos abrasivos o cepillos duros.</p></div>
+      <div class="tip prem-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Antihongos: cómo funciona</h4></div><p>La protección antihongos actúa sobre la película de pintura una vez seca. No elimina hongos preexistentes: tratá la superficie antes de pintar con fungicida apropiado.</p></div>
+      <div class="tip prem-warning"><div class="tip-head"><div class="tip-dot"></div><h4>No diluir en exceso</h4></div><p>Agregar demasiada agua reduce el poder cubritivo y la resistencia al lavado. Usá el producto prácticamente sin dilución para aprovechar todas sus propiedades.</p></div>
+      <div class="tip prem-info"><div class="tip-head"><div class="tip-dot"></div><h4>Almacenamiento</h4></div><p>Cerrá herméticamente el envase después de cada uso. Almacená en lugar fresco y seco, fuera del alcance de los niños. No exponer a heladas.</p></div>
+    </div>
+  </section>
+
+  <div class="divider-premium"></div>
+
+  <div class="safety-section safety-premium">
+    <button class="safety-toggle" onclick="toggleSafety(this)" aria-expanded="false">
+      <div class="safety-toggle-left">
+        
+        <div>
+          <div class="safety-toggle-title">Seguridad &amp; Primeros Auxilios</div>
+          <div class="safety-toggle-sub">Información de seguridad del producto</div>
+        </div>
+      </div>
+      <div class="safety-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </button>
+    <div class="safety-body">
+      <div class="safety-grid">
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con los ojos</div></div>
+          <p>Enjuagar con agua limpia y corriente durante al menos <strong>15 minutos</strong> sin interrupciones. No frotar. Si persiste el ardor o enrojecimiento, acudir al médico de inmediato.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con la piel</div></div>
+          <p>Retirar la ropa contaminada y lavar la zona con agua y jabón neutro. <strong>Nunca usar solventes</strong> para quitar restos sobre piel dañada o con heridas abiertas.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Inhalación</div></div>
+          <p>Trasladar al afectado a un lugar con aire fresco. El producto tiene olor suave de rápida disipación. Si los síntomas persisten o hay mareos, <strong>solicitar asistencia médica urgente</strong>.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Ingestión</div></div>
+          <p><strong>No inducir el vómito.</strong> Dar agua para diluir si la persona está consciente. Buscar atención médica inmediata llevando el envase del producto como referencia.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Incendio</div></div>
+          <p>Producto <strong>no inflamable ni combustible</strong>. No genera riesgos de ignición. En caso de incendio en el entorno, evacuar el área y usar agentes extintores convencionales.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Derrame accidental</div></div>
+          <p>Dejar secar los derrames pequeños y retirar mecánicamente. Para derrames en interiores, usar material absorbente. <strong>Evitar que llegue a desagües o cursos de agua.</strong></p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Almacenamiento</div></div>
+          <p>Guardar en ambiente fresco, seco y ventilado, lejos de niños. <strong>No apilar más de 1,5 m.</strong> Cerrar bien el envase después de cada uso para preservar las propiedades del producto.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Protección personal</div></div>
+          <p>Durante la aplicación: <strong>guantes impermeables, anteojos de seguridad y ropa que cubra brazos y piernas.</strong> En interiores, garantizar ventilación suficiente durante y después de la aplicación.</p>
+        </div>
+      </div>
+      <div class="safety-obs">
+        
+        <p><strong>Nota:</strong> Producto formulado para interiores de rápida habitabilidad. Aun así, se recomienda ventilar bien el ambiente durante el secado. Cubrir heridas antes de trabajar con el producto.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="premium-footer">
+    <div><div class="footer-logo">HOGAR&amp;<span class="prs">OBRA</span></div><div class="footer-sub">Látex Premium — Guía oficial</div></div>
+    <button class="footer-nav-btn to-home" onclick="goTo('home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Volver al inicio</button>
+    <div class="footer-right">Solo interior — Línea Premium<br>© Hogar &amp; Obra — Todos los derechos reservados</div>
+  </footer>
+
+</div><!-- /page-premium -->
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE: ENDUIDO
+═══════════════════════════════════════════════ -->
 <div class="page" id="page-enduido">
- 
+
   <section class="hero">
     <div class="hero-bg enduido-bg"></div>
     <div class="hero-inner">
       <div class="hero-eyebrow enduido">HOGAR &amp; OBRA — Guía oficial de aplicación</div>
       <h1>Enduido<br><em class="enduido-em">Plástico</em></h1>
+      <div class="hero-badges">
+        <span class="hero-badge enduido-badge">Solo interior</span>
+        <span class="hero-badge enduido-badge">Listo para usar</span>
+        <span class="hero-badge enduido-badge">2–3 manos</span>
+        <span class="hero-badge enduido-badge">0.8–1.2 kg/m²</span>
+      </div>
       <p class="hero-desc">Guía completa para aplicar enduido interior correctamente: preparación, manos, lijado y terminación profesional.</p>
-      <button class="hero-back-btn" onclick="goTo('latex')">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        Volver a instrucciones de Látex
-      </button>
     </div>
   </section>
- 
+
   <div class="divider-enduido"></div>
- 
+
   <section class="section">
     <div class="section-label enduido">Paso a paso</div>
     <div class="section-title">Proceso de<br>Aplicación</div>
     <div class="steps-grid enduido-grid">
-      <div class="step">
-        <span class="step-num">01</span>
-        <div class="step-icon">🧹</div>
-        <h3>Preparación de la pared</h3>
-        <p>Limpiar bien la superficie. Eliminar restos de pintura suelta, polvo y grasa. Aplicar fijador al agua o al aguarrás y dejar secar completamente.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">02</span>
-        <div class="step-icon">🖌️</div>
-        <h3>Preparación del enduido</h3>
-        <p>Abrir el balde y revolver bien con una espátula hasta que la pasta quede homogénea. No necesita agua ni mezcla. Si la superficie quedó seca de una sesión anterior, revolver nuevamente antes de continuar.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">03</span>
-        <div class="step-icon">🎨</div>
-        <h3>Primera mano (relleno)</h3>
-        <p>Con espátula o llana, aplicar la primera mano rellenando imperfecciones. No buscar perfección aún; el objetivo es nivelar. Espesor recomendado: 1 a 2 mm por mano.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">04</span>
-        <div class="step-icon">⏱️</div>
-        <h3>Secado entre manos</h3>
-        <p>Esperar mínimo 4 a 6 horas entre cada mano. En ambientes húmedos o con poca ventilación, extender el tiempo. El enduido debe estar completamente blanco y seco al tacto.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">05</span>
-        <div class="step-icon">✅</div>
-        <h3>Lijado intermedio</h3>
-        <p>Lijar con lija no past entre cada mano para eliminar rebabas y marcas de espátula. Limpiar el polvo con un trapo húmedo antes de continuar.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">06</span>
-        <div class="step-icon">🏁</div>
-        <h3>Segunda y tercera mano</h3>
-        <p>Aplicar 2 o 3 manos en total según el estado de la pared. La última mano debe ser lo más fina posible. Terminar lijando con lija fina para una superficie perfecta.</p>
-      </div>
+      <div class="step"><span class="step-num">01</span><h3>Preparación de la pared</h3><p>Limpiar bien la superficie. Eliminar restos de pintura suelta, polvo y grasa. Aplicar fijador al agua o al aguarrás y dejar secar completamente.</p></div>
+      <div class="step"><span class="step-num">02</span><h3>Preparación del enduido</h3><p>Abrir el balde y revolver bien con una espátula hasta que la pasta quede homogénea. No necesita agua ni mezcla.</p></div>
+      <div class="step"><span class="step-num">03</span><h3>Primera mano (relleno)</h3><p>Con espátula o llana, aplicar la primera mano rellenando imperfecciones. El objetivo es nivelar. Espesor recomendado: 1 a 2 mm por mano.</p></div>
+      <div class="step"><span class="step-num">04</span><h3>Secado entre manos</h3><p>Esperar mínimo 4 a 6 horas entre cada mano. El enduido debe estar completamente blanco y seco al tacto antes de continuar.</p></div>
+      <div class="step"><span class="step-num">05</span><h3>Lijado intermedio</h3><p>Lijar con lija entre cada mano para eliminar rebabas y marcas de espátula. Limpiar el polvo con trapo húmedo antes de continuar.</p></div>
+      <div class="step"><span class="step-num">06</span><h3>Segunda y tercera mano</h3><p>Aplicar 2 o 3 manos en total según el estado de la pared. La última mano debe ser lo más fina posible. Terminar lijando con lija fina para una superficie perfecta.</p></div>
     </div>
   </section>
- 
+
   <div class="divider-enduido"></div>
- 
+
   <section class="section">
     <div class="section-label enduido">Rendimiento y uso</div>
     <div class="section-title">Tabla de<br>Referencia</div>
     <div class="tips-grid">
-      <div class="tip enduido-tip">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Rendimiento</h4></div>
-        <p>El enduido listo rinde aproximadamente 0.8–1.2 kg por m² por mano. Para una habitación estándar de 20 m² de pared, calculá entre 3 y 4 baldes de 5 kg para dos manos.</p>
-      </div>
-      <div class="tip enduido-tip">
-        <div class="tip-head"><div class="tip-dot"></div><h4>No agregar agua</h4></div>
-        <p>El enduido listo ya tiene la consistencia correcta. No agregues agua salvo que haya espesado demasiado por almacenamiento prolongado; en ese caso, apenas unas gotas y revolvé bien.</p>
-      </div>
-      <div class="tip enduido-warning">
-        <div class="tip-head"><div class="tip-dot"></div><h4>No sobre-cargar la espátula</h4></div>
-        <p>Aplicá capas finas y parejas de 1 a 2 mm. Las capas gruesas se agrietan al secar. Es mejor dar tres manos finas que una sola mano gruesa.</p>
-      </div>
-      <div class="tip enduido-info">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Cantidad de manos</h4></div>
-        <p>Para paredes en buen estado: 2 manos. Para paredes muy irregulares o con huecos importantes: 3 o más manos. Cada mano debe estar completamente seca antes de la siguiente.</p>
-      </div>
-      <div class="tip enduido-warning">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Pintar sobre enduido</h4></div>
-        <p>Antes de aplicar látex, el enduido debe estar completamente seco (mínimo 24 hs) y lijado fino con lija N°180. Aplicá una mano de fijador diluido 1:2 antes del látex.</p>
-      </div>
-      <div class="tip enduido-info">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Almacenamiento del balde</h4></div>
-        <p>Cerrá bien la tapa después de cada uso. Si queda pasta en los bordes, limpialos antes de cerrar para evitar que se seque y caiga dentro. Vida útil: 12 meses en lugar fresco.</p>
-      </div>
+      <div class="tip enduido-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Rendimiento</h4></div><p>El enduido listo rinde aproximadamente 0.8–1.2 kg por m² por mano. Para una habitación estándar de 20 m² de pared, calculá entre 3 y 4 baldes de 5 kg para dos manos.</p></div>
+      <div class="tip enduido-tip"><div class="tip-head"><div class="tip-dot"></div><h4>No agregar agua</h4></div><p>El enduido listo ya tiene la consistencia correcta. No agregues agua salvo que haya espesado demasiado por almacenamiento prolongado; en ese caso, apenas unas gotas.</p></div>
+      <div class="tip enduido-warning"><div class="tip-head"><div class="tip-dot"></div><h4>No sobrecargar la espátula</h4></div><p>Aplicá capas finas y parejas de 1 a 2 mm. Las capas gruesas se agrietan al secar. Es mejor dar tres manos finas que una sola mano gruesa.</p></div>
+      <div class="tip enduido-info"><div class="tip-head"><div class="tip-dot"></div><h4>Cantidad de manos</h4></div><p>Para paredes en buen estado: 2 manos. Para paredes muy irregulares o con huecos importantes: 3 o más manos. Cada mano completamente seca antes de la siguiente.</p></div>
+      <div class="tip enduido-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Pintar sobre enduido</h4></div><p>Antes de aplicar látex, el enduido debe estar completamente seco (mínimo 24 hs) y lijado fino con lija N°180. Aplicá una mano de fijador diluido 1:2 antes del látex.</p></div>
+      <div class="tip enduido-info"><div class="tip-head"><div class="tip-dot"></div><h4>Almacenamiento del balde</h4></div><p>Cerrá bien la tapa después de cada uso. Si queda pasta en los bordes, limpialos antes de cerrar para evitar que se seque y caiga dentro.</p></div>
     </div>
   </section>
- 
+
   <div class="divider-enduido"></div>
- 
+
   <section class="section">
     <div class="section-label enduido">Consejos profesionales</div>
     <div class="section-title">Tips &amp;<br>Advertencias</div>
     <div class="tips-grid">
-      <div class="tip enduido-tip">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Herramientas recomendadas</h4></div>
-        <p>Usá llana de acero inoxidable para superficies grandes y espátula flexible para detalles y esquinas. Limpialas con agua inmediatamente después de usar.</p>
-      </div>
-      <div class="tip enduido-warning">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Temperatura de aplicación</h4></div>
-        <p>Aplicá entre 10°C y 35°C. No trabajes con enduido bajo cero ni en días de lluvia intensa. El frío extremo puede provocar fisuras al secar.</p>
-      </div>
-      <div class="tip enduido-info">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Luz rasante para controlar</h4></div>
-        <p>Usá una linterna o lámpara a 45° sobre la pared para detectar imperfecciones antes de lijar. Esta técnica revela cualquier ondulación invisible a simple vista.</p>
-      </div>
-      <div class="tip enduido-tip">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Exterior: enduido acrílico</h4></div>
-        <p>Para exteriores usá únicamente enduido plástico acrílico, que resiste los cambios de temperatura y humedad. El enduido de yeso solo es apto para interiores.</p>
-      </div>
-      <div class="tip enduido-warning">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Fisuras durante el secado</h4></div>
-        <p>Si aparecen fisuras finas al secar, la mano fue demasiado gruesa o el secado fue muy rápido por corriente de aire. Lijá y aplicá una mano más fina.</p>
-      </div>
-      <div class="tip enduido-info">
-        <div class="tip-head"><div class="tip-dot"></div><h4>Uso interior únicamente</h4></div>
-        <p>El enduido de yeso o vinílico no es apto para exteriores ni zonas con humedad constante (baños sin ventilación). En esos casos, usá masilla acrílica impermeable.</p>
-      </div>
+      <div class="tip enduido-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Herramientas recomendadas</h4></div><p>Usá llana de acero inoxidable para superficies grandes y espátula flexible para detalles y esquinas. Limpialas con agua inmediatamente después de usar.</p></div>
+      <div class="tip enduido-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Temperatura de aplicación</h4></div><p>Aplicá entre 10°C y 35°C. No trabajes con enduido bajo cero ni en días de lluvia intensa. El frío extremo puede provocar fisuras al secar.</p></div>
+      <div class="tip enduido-info"><div class="tip-head"><div class="tip-dot"></div><h4>Luz rasante para controlar</h4></div><p>Usá una linterna o lámpara a 45° sobre la pared para detectar imperfecciones antes de lijar. Esta técnica revela cualquier ondulación invisible a simple vista.</p></div>
+      <div class="tip enduido-tip"><div class="tip-head"><div class="tip-dot"></div><h4>Exterior: enduido acrílico</h4></div><p>Para exteriores usá únicamente enduido plástico acrílico, que resiste los cambios de temperatura y humedad. El enduido de yeso solo es apto para interiores.</p></div>
+      <div class="tip enduido-warning"><div class="tip-head"><div class="tip-dot"></div><h4>Fisuras durante el secado</h4></div><p>Si aparecen fisuras finas al secar, la mano fue demasiado gruesa o el secado fue muy rápido por corriente de aire. Lijá y aplicá una mano más fina.</p></div>
+      <div class="tip enduido-info"><div class="tip-head"><div class="tip-dot"></div><h4>Uso interior únicamente</h4></div><p>El enduido de yeso o vinílico no es apto para exteriores ni zonas con humedad constante. En esos casos, usá masilla acrílica impermeable.</p></div>
     </div>
   </section>
- 
-  <footer class="enduido-footer">
-    <div>
-      <div class="footer-logo">HOGAR&amp;<span class="enduido-span">OBRA</span></div>
-      <div class="footer-sub">Enduido Plástico — Guía oficial</div>
-    </div>
-    <button class="footer-nav-btn to-latex" onclick="goTo('latex')">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      Volver a instrucciones de Látex
+
+  <div class="divider-enduido"></div>
+
+  <div class="safety-section safety-enduido">
+    <button class="safety-toggle" onclick="toggleSafety(this)" aria-expanded="false">
+      <div class="safety-toggle-left">
+        
+        <div>
+          <div class="safety-toggle-title">Seguridad &amp; Primeros Auxilios</div>
+          <div class="safety-toggle-sub">Información de seguridad del producto</div>
+        </div>
+      </div>
+      <div class="safety-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
     </button>
-    <div class="footer-right">Solo interior (salvo acrílico) — Uso profesional<br>© Hogar &amp; Obra — Todos los derechos reservados</div>
+    <div class="safety-body">
+      <div class="safety-grid">
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con los ojos</div></div>
+          <p>Enjuagar con abundante agua corriente durante al menos <strong>15 minutos</strong>. Si se usan lentes de contacto, retirarlos antes de enjuagar. Consultar médico si la irritación no cede.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Contacto con la piel</div></div>
+          <p>Lavar bien con agua y jabón neutro. El enduido al agua es fácilmente removible antes del secado. <strong>No usar solventes</strong> sobre piel lesionada para quitar restos secos.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Inhalación</div></div>
+          <p>El enduido plástico tiene olor muy leve. En caso de malestar, ventilar el ambiente y llevar al afectado al exterior. Si los síntomas persisten, <strong>consultar a un médico</strong>.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Ingestión</div></div>
+          <p><strong>No provocar el vómito.</strong> Administrar agua si la persona está consciente. Acudir a un centro de salud inmediatamente y llevar el envase para orientar el tratamiento.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Incendio</div></div>
+          <p>Producto <strong>no combustible</strong>. No presenta riesgo de ignición. No se requieren medidas especiales de extinción. Ante incendio en el entorno, usar agentes extintores convencionales.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Derrame accidental</div></div>
+          <p>Recoger la pasta derramada con espátula antes de que seque. Si ya secó, retirar mecánicamente. <strong>No dejar que llegue a desagües.</strong> Limpiar con agua y trapo húmedo.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Almacenamiento</div></div>
+          <p>Guardar en lugar fresco, seco y alejado de niños. <strong>No apilar más de 1,5 m de altura.</strong> Cerrar bien el balde después de cada uso. Vida útil: 12 meses en condiciones adecuadas.</p>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-head"><div class="safety-item-title">Protección personal</div></div>
+          <p>Usar <strong>guantes de trabajo, protección ocular y ropa adecuada</strong> durante la aplicación. Mantener el ambiente ventilado. Limpiar herramientas con agua inmediatamente después de usarlas.</p>
+        </div>
+      </div>
+      <div class="safety-obs">
+        
+        <p><strong>Nota:</strong> El enduido genera polvo durante el lijado. Se recomienda usar mascarilla para polvo y protección ocular en esa etapa del trabajo, especialmente en espacios cerrados.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="enduido-footer">
+    <div><div class="footer-logo">HOGAR&amp;<span class="es">OBRA</span></div><div class="footer-sub">Enduido Plástico — Guía oficial</div></div>
+    <button class="footer-nav-btn to-home" onclick="goTo('home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Volver al inicio</button>
+    <div class="footer-right">Solo interior (salvo acrílico)<br>© Hogar &amp; Obra — Todos los derechos reservados</div>
   </footer>
- 
+
 </div><!-- /page-enduido -->
- 
- 
+
+
 <script>
-  function goTo(page) {
-    // ocultar todas las pages
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
- 
-    // actualizar navbar switcher
-    const btnLatex   = document.getElementById('btn-latex');
-    const btnEnduido = document.getElementById('btn-enduido');
-    btnLatex.classList.remove('active-latex', 'active-enduido');
-    btnEnduido.classList.remove('active-latex', 'active-enduido');
- 
-    if (page === 'latex') {
-      btnLatex.classList.add('active-latex');
-    } else {
-      btnEnduido.classList.add('active-enduido');
-    }
- 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function toggleSafety(btn) {
+  var body = btn.nextElementSibling;
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  btn.setAttribute('aria-expanded', !isOpen);
+}
+
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(function(p) {
+    p.classList.remove('active');
+  });
+
+  // Resetear animaciones del home para que se reejecuten
+  if (page === 'home') {
+    var animated = document.querySelectorAll(
+      '#page-home .home-eyebrow, #page-home .home-title, #page-home .home-subtitle, #page-home .home-cta-label, #page-home .product-card'
+    );
+    animated.forEach(function(el) {
+      el.style.animation = 'none';
+      el.offsetHeight; // reflow
+      el.style.animation = '';
+    });
   }
+
+  var target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+
+  var btns = ['latex','profesional','premium','enduido'];
+  btns.forEach(function(b) {
+    var el = document.getElementById('btn-' + b);
+    if (el) el.className = 'nav-pill';
+  });
+
+  if (page !== 'home') {
+    var active = document.getElementById('btn-' + page);
+    if (active) active.classList.add('active-' + page);
+  }
+
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
+}
+
+// Fix touch en iOS/iPad para las cards
+document.addEventListener('DOMContentLoaded', function() {
+  var cards = document.querySelectorAll('.product-card');
+  cards.forEach(function(card) {
+    var startY = 0;
+    card.addEventListener('touchstart', function(e) {
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    card.addEventListener('touchend', function(e) {
+      var deltaY = Math.abs(e.changedTouches[0].clientY - startY);
+      if (deltaY < 10) { // no fue scroll, fue tap
+        var fn = card.getAttribute('onclick');
+        if (fn) { e.preventDefault(); new Function(fn)(); }
+      }
+    }, { passive: false });
+  });
+});
 </script>
- 
+
 </body>
 </html>
+
+ 
+
+
